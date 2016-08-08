@@ -11,7 +11,10 @@ import com.bloom.proc.events.StringArrayEvent;
 import com.bloom.uuid.UUID;
 import java.util.Map;
 import org.apache.log4j.Logger;
-
+/*
+ * 此类负责将事件数据实时地写入到Hazelcast集群中的节点上
+ * 
+ */
 @PropertyTemplate(name="HazelcastWriter", type=AdapterType.internal, properties={@com.bloom.anno.PropertyTemplateProperty(name="url", type=String.class, required=true, defaultValue="127.0.0.1:5701"), @com.bloom.anno.PropertyTemplateProperty(name="mapName", type=String.class, required=true, defaultValue="wactions")}, outputType=StringArrayEvent.class)
 public class HazelcastWriter_1_0
   extends BaseProcess
@@ -34,7 +37,11 @@ public class HazelcastWriter_1_0
       logger.info("Successfully connected to Hazelcast server :" + url + ", map " + mapName);
     }
   }
-  
+  /*
+   * 输入的事件为 bloom stream platform 标准的事件(non-Javadoc)
+   * 写入的(K, V)对应的值为(EventID, Payload).
+   * @see com.bloom.proc.BaseProcess#receiveImpl(int, com.bloom.event.Event)
+   */
   public void receiveImpl(int channel, Event event)
     throws Exception
   {
